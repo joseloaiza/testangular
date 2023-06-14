@@ -62,25 +62,5 @@ pipeline
                     }
                 }
         }
-        stage('Deploy API') 
-        {
-            steps 
-            {
-                script
-                {
-                     withCredentials([[
-                        $class: 'AmazonWebServicesCredentialsBinding',
-                        credentialsId: "aws_credentials",
-                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) 
-                        {
-                            sh '''aws ecs register-task-definition --execution-role-arn ${EXECUTION_ROLE_ARN} --cli-input-json file:////$PWD/infra/task-definition.json --region ${AWS_DEFAULT_REGION}'''
-                            sh '''aws ecs update-service --cluster ${CLUSTER} --service ${SERVICE} --force-new-deployment'''
-                         }
-
-                }
-            }
-        }
-       
     }
 }
