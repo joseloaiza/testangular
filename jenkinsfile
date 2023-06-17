@@ -1,7 +1,7 @@
 pipeline 
 {
     agent any
-    tools {nodejs "14.20.1"}
+    //tools {nodejs "14.20.1"}
 
     options 
     {
@@ -43,11 +43,15 @@ pipeline
                 }
             }
          } 
+
+
         stage('Building image') 
         {
             steps
                 {
-                 sh '''time DOCKER_BUILDKIT=1 docker build --no-cache -t ${IMAGE_REPO_NAME}:${IMAGE_TAG} .'''
+                 sh '/usr/bin/ng build --prod'
+                 sh '''docker build -t ${IMAGE_REPO_NAME}:${IMAGE_TAG} .'''
+                 //sh '''time DOCKER_BUILDKIT=1 docker build --no-cache -t ${IMAGE_REPO_NAME}:${IMAGE_TAG} .'''
                  //sh ''' time DOCKER_BUILDKIT=1 docker buildx build --no-cache  --platform=linux/amd64 -t ${IMAGE_REPO_NAME}:${IMAGE_TAG} .'''
                 }
         }
