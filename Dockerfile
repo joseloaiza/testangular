@@ -4,7 +4,7 @@ FROM node:16.20.0-alpine as build
 WORKDIR /dist/src/app
 COPY package.json package-lock.json ./
 RUN npm install -g npm@9.6.6
-RUN npm cache clean --force
+#RUN npm cache clean --force
 COPY . .
 #RUN node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng build --prod
 #RUN ng build --prod
