@@ -29,7 +29,7 @@ stages:
         repository: $(DOCKER_REPOSITORY_NAME)
     - task: ECRPushImage@1  
       inputs:
-        awsCredentials: 'AWS_ECR'
+        awsCredentials: 'AWS_connection'
         regionName: $(AWS_REGION)
         imageSource: 'imagename'
         sourceImageName: $(DOCKER_REPOSITORY_NAME)
