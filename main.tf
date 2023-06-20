@@ -21,6 +21,7 @@ resource "aws_default_vpc" "default" {
 resource "aws_subnet" "sample" {
   vpc_id     = aws_default_vpc.default.id
   cidr_block = "172.31.64.0/20"
+  
 }
 
 provider "kubernetes" {

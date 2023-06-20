@@ -20,3 +20,12 @@ steps:
     backendServiceAWS: 'aws-for-terraform'
     backendAWSBucketName: 'terraform-backend-state-jlq'
     backendAWSKey: 'kubernetes-dev.tfstate'
+- task: TerraformTaskV4@4
+  inputs:
+    provider: 'aws'
+    command: 'validate'
+- task: TerraformTaskV4@4
+  inputs:
+    provider: 'aws'
+    command: 'apply'
+    environmentServiceNameAWS: 'aws-for-terraform'
