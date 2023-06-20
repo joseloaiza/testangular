@@ -18,10 +18,10 @@ resource "aws_default_vpc" "default" {
 
 }
 
-data "aws_subnet_ids" "subnets" {
-  vpc_id = aws_default_vpc.default.id
+resource "aws_subnet" "sample" {
+  vpc_id     = aws_default_vpc.default.id
+  cidr_block = "172.31.64.0/20"
 }
-
 
 provider "kubernetes" {
   //>>Uncomment this section once EKS is created - Start
