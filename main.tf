@@ -35,9 +35,7 @@ output "subnet" {
   value = [for subnet in data.aws_subnet.subnet_id : subnet.id]
 }
 
-output "subnet_cidr_blocks" {
-  value = ["${data.aws_subnet.subnet_id.*.id}"]
-}
+
 
 provider "kubernetes" {
   //>>Uncomment this section once EKS is created - Start
@@ -51,7 +49,7 @@ module "in28minutes-cluster" {
   source          = "terraform-aws-modules/eks/aws"
   cluster_name    = "test-cluster"
   cluster_version = "1.23"
-  subnet_ids         =  ["${data.aws_subnet.subnet_id.*.id}"] #aws_subnets.s #aws_subnet ["subnet-0c4101638fbac0aac"] #CHANGE # Donot choose subnet from us-east-1e
+  subnet_ids         =  [for subnet in data.aws_subnet.subnet_id : subnet.id] #aws_subnets.s #aws_subnet ["subnet-0c4101638fbac0aac"] #CHANGE # Donot choose subnet from us-east-1e
   vpc_id          = aws_default_vpc.default.id
 
   //Newly added entry to allow connection to the api server
