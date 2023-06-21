@@ -19,12 +19,20 @@ resource "aws_default_vpc" "default" {
 }
 
 data "aws_subnets" "subnets" {
-  vpc_id     = aws_default_vpc.default.id
+  filter {
+    name   = "vpc-id"
+    values = [aws_default_vpc.default.id]
+  }
+  #vpc_id     = aws_default_vpc.default.id
 }
 
 data "aws_subnet" "subnet_id" {
-  for_each = toset(data.aws_subnets.example.ids)
+  for_each = toset(data.aws_subnets.subnets.ids)
   id       = each.value
+}
+
+output "subnet" {
+  value = [for subnet in data.aws_subnet.subnet : subnet.id]
 }
 
 output "subnet_cidr_blocks" {
