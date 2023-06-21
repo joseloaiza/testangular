@@ -59,12 +59,12 @@ provider "kubernetes" {
   //>>Uncomment this section once EKS is created - End
 }
 
-module "in28minutes-cluster" {
+module "payroll-cluster" {
   source          = "terraform-aws-modules/eks/aws"
   cluster_name    = "test-cluster"
   cluster_version = "1.23"
   subnet_ids         = ["subnet-083a90b145f64470e", "subnet-0b413521f153c850f"]  #[for subnet in data.aws_subnet.subnet_id : subnet.id] #aws_subnets.s #aws_subnet ["subnet-0c4101638fbac0aac"] #CHANGE # Donot choose subnet from us-east-1e
-  vpc_id          = data.ws_vpc.selected.id
+  vpc_id          = data.aws_vpc.selected.id
 
   //Newly added entry to allow connection to the api server
   //Without this change error in step 163 in course will not go away
