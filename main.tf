@@ -30,7 +30,7 @@ resource "aws_default_vpc" "default" {
 data "aws_subnets" "subnets" {
   filter {
     name   = "vpc-id"
-    value = data.aws_vpc.selected.id
+    values = [data.aws_vpc.selected.id]
   }
   #vpc_id     = aws_default_vpc.default.id
 }
