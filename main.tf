@@ -14,6 +14,14 @@ terraform {
   }
 }
 
+
+variable "vpc-078e43cf2e3c072af" {}
+
+data "aws_vpc" "selected" {
+  id = var.vpc_id
+}
+
+
 resource "aws_default_vpc" "default" {
 
 }
@@ -21,7 +29,7 @@ resource "aws_default_vpc" "default" {
 data "aws_subnets" "subnets" {
   filter {
     name   = "vpc-id"
-    values = [aws_default_vpc.default.id]
+    values = [aws_vpc.selected.id]
   }
   #vpc_id     = aws_default_vpc.default.id
 }
@@ -49,8 +57,8 @@ module "in28minutes-cluster" {
   source          = "terraform-aws-modules/eks/aws"
   cluster_name    = "test-cluster"
   cluster_version = "1.23"
-  subnet_ids         =  [for subnet in data.aws_subnet.subnet_id : subnet.id] #aws_subnets.s #aws_subnet ["subnet-0c4101638fbac0aac"] #CHANGE # Donot choose subnet from us-east-1e
-  vpc_id          = aws_default_vpc.default.id
+  subnet_ids         = ["subnet-083a90b145f64470e", "subnet-0b413521f153c850f"]  #[for subnet in data.aws_subnet.subnet_id : subnet.id] #aws_subnets.s #aws_subnet ["subnet-0c4101638fbac0aac"] #CHANGE # Donot choose subnet from us-east-1e
+  vpc_id          = ws_vpc.selected.id
 
   //Newly added entry to allow connection to the api server
   //Without this change error in step 163 in course will not go away
