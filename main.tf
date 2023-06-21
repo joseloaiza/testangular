@@ -18,10 +18,17 @@ resource "aws_default_vpc" "default" {
 
 }
 
-resource "aws_subnet" "sample" {
+data "aws_subnets" "subnets" {
   vpc_id     = aws_default_vpc.default.id
-  cidr_block = "172.31.64.0/20"
-  
+}
+
+data "aws_subnet" "subnet_id" {
+  for_each = toset(data.aws_subnets.example.ids)
+  id       = each.value
+}
+
+output "subnet_cidr_blocks" {
+  value = ["${data.aws_subnet.subnet_id.*.id}"]
 }
 
 provider "kubernetes" {
@@ -36,7 +43,7 @@ module "in28minutes-cluster" {
   source          = "terraform-aws-modules/eks/aws"
   cluster_name    = "test-cluster"
   cluster_version = "1.23"
-  subnet_ids         = ["subnet-0c4101638fbac0aac"] #CHANGE # Donot choose subnet from us-east-1e
+  subnet_ids         =  ["${data.aws_subnet.subnet_id.*.id}"] #aws_subnets.s #aws_subnet ["subnet-0c4101638fbac0aac"] #CHANGE # Donot choose subnet from us-east-1e
   vpc_id          = aws_default_vpc.default.id
 
   //Newly added entry to allow connection to the api server
