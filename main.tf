@@ -32,7 +32,7 @@ data "aws_subnet" "subnet_id" {
 }
 
 output "subnet" {
-  value = [for subnet in data.aws_subnet.subnet : subnet.id]
+  value = [for subnet in data.aws_subnet.subnet_id : subnet.id]
 }
 
 output "subnet_cidr_blocks" {
