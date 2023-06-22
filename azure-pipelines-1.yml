@@ -27,6 +27,8 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        buildContext: '$(Build.SourcesDirectory)'
+        repository: $(DOCKER_REPOSITORY_NAME)
     - task: ECRPushImage@1  
       inputs:
         awsCredentials: 'AWS_connection'
@@ -36,7 +38,7 @@ stages:
         sourceImageTag: '$(Build.BuildId)'
         pushTag: latest
         repositoryName: '$(DOCKER_REPOSITORY_NAME)'
-
+    
     - task: CopyFiles@2
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
