@@ -30,12 +30,11 @@ stages:
     - task: ECRPushImage@1  
       inputs:
         awsCredentials: 'AWS_connection'
-        regionName: $(AWS_REGION)
-        imageSource: 'app_angular_test'
-        sourceImageName: $(DOCKER_REPOSITORY_NAME)
-        sourceImageTag: $(Build.BuildId)
-        pushTag: latest
-        repositoryName: $(DOCKER_REPOSITORY_NAME)
+        regionName: '$(AWS_REGION)'
+        imageSource: 'imagename'
+        sourceImageName: '$(DOCKER_REPOSITORY_NAME)'
+        sourceImageTag: '$(Build.BuildId)'
+        repositoryName: '$(DOCKER_REPOSITORY_NAME)'
 
     - task: CopyFiles@2
       inputs:
@@ -68,4 +67,4 @@ stages:
         kubernetesServiceConnection: 'aws-kubernetes-service-connection'
         namespace: 'default'
         manifests: '$(System.ArtifactsDirectory)/kubernetes/deployment.yaml'
-        containers: 'joseloaiza/testangular_image:$(tag)'
+        containers: '746662389335.dkr.ecr.us-east-1.amazonaws.com/angulartest:latest'
