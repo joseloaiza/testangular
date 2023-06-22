@@ -9,7 +9,9 @@ resources:
 - repo: self
 
 variables:
-  tag: '$(Build.BuildId)'
+  - group: dev
+  - name: DOCKER_REPOSITORY
+    value: $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/$(DOCKER_REPOSITORY_NAME)
 
 stages:
 - stage: Build
@@ -25,16 +27,24 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(tag)
+    - task: ECRPushImage@1  
+      inputs:
+        awsCredentials: 'AWS_connection'
+        regionName: $(AWS_REGION)
+        imageSource: 'app_angular_test'
+        sourceImageName: $(DOCKER_REPOSITORY_NAME)
+        sourceImageTag: $(Build.BuildId)
+        pushTag: latest
+        repositoryName: $(DOCKER_REPOSITORY_NAME)
+
     - task: CopyFiles@2
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
         Contents: '**/*.yaml'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+        TargetFolder: '$(Build.ArtifactsStagingDirectory)'
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        PathtoPublish: '$(Build.ArtifactsStagingDirectory)'
         ArtifactName: 'manifest'
         publishLocation: 'Container'
 - stage: Deploy
