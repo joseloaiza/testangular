@@ -34,6 +34,7 @@ stages:
         imageSource: 'imagename'
         sourceImageName: '$(DOCKER_REPOSITORY_NAME)'
         sourceImageTag: '$(Build.BuildId)'
+        pushTag: latest
         repositoryName: '$(DOCKER_REPOSITORY_NAME)'
 
     - task: CopyFiles@2
