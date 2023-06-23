@@ -20,7 +20,7 @@ steps:
     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
     backendServiceAWS: 'aws-for-terraform'
     backendAWSBucketName: 'terraform-backend-state-jlq'
-    backendAWSKey: 'kubernetes-dev.tfstate'
+    backendAWSKey: 'kubernetes-demo.tfstate'
 - task: TerraformTaskV4@4
   inputs:
     provider: 'aws'
