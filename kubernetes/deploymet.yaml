@@ -36,9 +36,9 @@ metadata:
   namespace: default
 spec:
   ports:
-    port: 80 #CHANGE
-    protocol: TCP
-    targetPort: 8000 #CHANGE
+    - protocol: TCP
+      port: 80 #CHANGE
+      targetPort: 8000 #CHANGE
   selector:
     app: testangular
   sessionAffinity: None #CHANGE
