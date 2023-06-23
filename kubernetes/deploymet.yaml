@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: testangular-deployment
   labels:
     app: testangular
-  name: testangular
   namespace: default
 spec:
-  replicas: 1 #CHANGE
+  replicas: 2 #CHANGE
   minReadySeconds: 45
   selector:
     matchLabels:
       app: testangular
   strategy:
     rollingUpdate:
-      maxSurge: 25%
+      maxSurge: 25% 
       maxUnavailable: 25%
     type: RollingUpdate
   template:
@@ -22,7 +22,7 @@ spec:
         app: testangular
     spec:
       containers:
-      - name: testangular
+      - name: testangular-container
         image: 746662389335.dkr.ecr.us-east-1.amazonaws.com/angulartest:latest
         imagePullPolicy: IfNotPresent
         ports:
@@ -57,12 +57,12 @@ kind: Service
 metadata:
   labels: #PODS
     app: testangular
-  name: testangular
+  name: testangular-service
   namespace: default
 spec:
   ports:
   - # nodePort: 30702 #CHANGE
-    port: 8000 #CHANGE
+    port: 80 #CHANGE
     protocol: TCP
     targetPort: 8000 #CHANGE
   selector:
