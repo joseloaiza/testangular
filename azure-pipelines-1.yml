@@ -60,7 +60,7 @@ stages:
     - task: DownloadPipelineArtifact@2
       inputs:
         buildType: 'current'
-        artifactName: 'manifests'
+        artifactName: 'manifest'
         itemPattern: '**/*.yaml'
         targetPath: '$(System.ArtifactsDirectory)'
     - task: KubernetesManifest@1
@@ -69,5 +69,5 @@ stages:
         connectionType: 'kubernetesServiceConnection'
         kubernetesServiceConnection: 'aws-kubernetes-service-connection'
         namespace: 'default'
-        manifests: '$(System.ArtifactsDirectory)/kubernetes/deployment.yaml'
+        manifests: '$(System.ArtifactsDirectory)/kubernetes/deploymet.yaml'
         containers: '746662389335.dkr.ecr.us-east-1.amazonaws.com/angulartest:latest'
