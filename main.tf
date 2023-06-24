@@ -23,9 +23,9 @@ data "aws_vpc" "selected" {
 }
 
 
-resource "aws_default_vpc" "default" {
-
-}
+#resource "aws_default_vpc" "default" {
+#
+#}
 
 data "aws_subnets" "subnets" {
   filter {
@@ -62,7 +62,7 @@ provider "kubernetes" {
 module "payroll-cluster" {
   source          = "terraform-aws-modules/eks/aws"
   cluster_name    = "test-cluster"
-  cluster_version = "1.23"
+  cluster_version = "1.27"
   subnet_ids         = ["subnet-083a90b145f64470e", "subnet-0b413521f153c850f"]  #[for subnet in data.aws_subnet.subnet_id : subnet.id] #aws_subnets.s #aws_subnet ["subnet-0c4101638fbac0aac"] #CHANGE # Donot choose subnet from us-east-1e
   vpc_id          = data.aws_vpc.selected.id
 
@@ -70,28 +70,28 @@ module "payroll-cluster" {
   //Without this change error in step 163 in course will not go away
   cluster_endpoint_public_access  = true
 
-# EKS Managed Node Group(s)
-  eks_managed_node_group_defaults = {
-    instance_types = ["t2.small", "t2.medium"]
-  }
-
-  eks_managed_node_groups = {
-    blue = {}
-    green = {
-      min_size     = 1
-      max_size     = 10
-      desired_size = 2
-
-      instance_types = ["t2.medium"]
+  # EKS Managed Node Group(s)
+    eks_managed_node_group_defaults = {
+      instance_types = ["t2.small", "t2.medium"]
     }
-  }
+
+    eks_managed_node_groups = {
+      blue = {}
+      green = {
+        min_size     = 1
+        max_size     = 10
+        desired_size = 2
+
+        instance_types = ["t2.medium"]
+      }
+    }
 }
 //>>Uncomment this section once EKS is created - Start
   data "aws_eks_cluster" "cluster" {
-    name = "test-cluster" #module.payroll-cluster.cluster_name
+    name = module.payroll-cluster.cluster_name
   }
  data "aws_eks_cluster_auth" "cluster" {
-   name = "test-cluster" #module.payroll-cluster.cluster_name
+   name = module.payroll-cluster.cluster_name
  }
  # We will use ServiceAccount to connect to K8S Cluster in CI/CD mode
  # ServiceAccount needs permissions to create deployments 
