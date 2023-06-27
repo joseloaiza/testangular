@@ -1,3 +1,5 @@
+data "aws_availability_zones" "available" {}
+
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
   version = "3.14.2"
@@ -25,6 +27,7 @@ module "vpc" {
   #  "kubernetes.io/cluster/${local.cluster_name}" = "shared"
   #  "kubernetes.io/role/internal-elb" = 1
   #}
+
 
 
   #enable_ecr_dkr_endpoint              = true
