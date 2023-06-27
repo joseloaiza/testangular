@@ -24,7 +24,7 @@ stages:
     steps:
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory/ECS)'
+        SourceFolder: '$(System.DefaultWorkingDirectory)/ECS'
         Contents: '**/*.json'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
     - task: Docker@2
