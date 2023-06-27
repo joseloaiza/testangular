@@ -10,8 +10,8 @@ resource "aws_eks_node_group" "eksnode" {
 
   scaling_config {
     desired_size = 2
-    max_size     = 2
-    min_size     = 2
+    max_size     = 3
+    min_size     = 1
   }
 
   update_config {
@@ -23,7 +23,7 @@ resource "aws_eks_node_group" "eksnode" {
     aws_iam_role_policy_attachment.eksnode-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.eksnode-AmazonEC2ContainerRegistryReadOnly,
   ]
-}
+} 
 
 #----------------------------
 # IAM Role for EKS Node Group
