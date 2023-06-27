@@ -27,10 +27,10 @@ module "vpc" {
   #}
 
 
-  enable_ecr_dkr_endpoint              = true
-  ecr_dkr_endpoint_private_dns_enabled = true
-  ecr_dkr_endpoint_security_group_ids  = [aws_security_group.vpc_endpoint.id]
-  enable_s3_endpoint = true
+  #enable_ecr_dkr_endpoint              = true
+  #ecr_dkr_endpoint_private_dns_enabled = true
+  #ecr_dkr_endpoint_security_group_ids  = [aws_security_group.vpc_endpoint.id]
+  #enable_s3_endpoint = true
 }
 
 # Security Group configuration for VPC endpoints
