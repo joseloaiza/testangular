@@ -68,7 +68,7 @@ resource "aws_ecs_service" "my_first_service" {
   network_configuration {
     subnets          =  ["subnet-083a90b145f64470e", "subnet-0b413521f153c850f"] #["${aws_default_subnet.default_subnet_a.id}", "${aws_default_subnet.default_subnet_b.id}", "${aws_default_subnet.default_subnet_c.id}"]
     assign_public_ip = true                                                # Providing our containers with public IPs
-    security_groups  = ["${aws_security_group.service_security_group.id}"] # Setting the security group
+    security_groups  = ["${data.aws_security_group.service_security_group.id}"] # Setting the security group
   }
 }
 
