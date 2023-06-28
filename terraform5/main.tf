@@ -1,4 +1,4 @@
-resource "aws_ecr_repository" "my_first_ecr_repo" {
+data "aws_ecr_repository" "my_first_ecr_repo" {
   name = "angulartest"
 }
 
@@ -31,7 +31,7 @@ resource "aws_ecs_task_definition" "my_first_task" {
   [
     {
       "name": "my-first-task",
-      "image": "${aws_ecr_repository.my_first_ecr_repo.repository_url}",
+      "image": "${data.aws_ecr_repository.my_first_ecr_repo.repository_url}",
       "essential": true,
       "portMappings": [
         {
