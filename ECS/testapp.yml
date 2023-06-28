@@ -1,0 +1,86 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: container api on ecs cluster
+
+Resources:
+  AppTestTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: payroll-tg-fe
+      VpcId: !ImportValue VPC
+      Port: 80
+      Protocol: HTTP
+      Matcher:
+        HttpCode: 200-299
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /stat
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 10
+      TargetType: ip
+
+  Task:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: test-app
+      Cpu: 512
+      Memory: 1024
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      ExecutionRoleArn: !ImportValue ECSTaskExecutionRole
+      ContainerDefinitions:
+        - Name: PayrollApiV2
+          Image: 746662389335.dkr.ecr.us-east-1.amazonaws.com/angulartest:latest
+          PortMappings:
+            - ContainerPort: 4567
+              Protocol: tcp
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: "LogsApiPayroll"
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: "test-app"
+  Service:
+    Type: AWS::ECS::Service
+    DependsOn: ListenerRule
+    Properties:
+      ServiceName: AppTestService
+      TaskDefinition: !Ref Task
+      Cluster: !ImportValue "ClusterPayroll"
+      LaunchType: FARGATE
+      DesiredCount: 2
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 70
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          Subnets:
+            - !ImportValue PublicSubnet1
+            - !ImportValue PublicSubnet2
+          SecurityGroups:
+            - !ImportValue ContainerSecurityGroupPayroll
+      LoadBalancers:
+        - ContainerName: angulartest
+          ContainerPort: 4567
+          TargetGroupArn: !Ref AppTestTargetGroup
+
+  ListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !ImportValue LBListenerPayroll
+      Priority: 1
+      Conditions:
+        - Field: path-pattern
+          Values:
+            - /test/*
+      Actions:
+        - TargetGroupArn: !Ref AppTestTargetGroup
+          Type: forward
+
+Outputs:
+  ApiEndpoint:
+    Description: Payroll API Endpoint
+    Value: !Join ["", ["http://", !ImportValue DomainNamePayroll, "/test/*"]]
+    Export:
+      Name: "TestAppTestEndpoint"
