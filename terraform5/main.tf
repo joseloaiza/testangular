@@ -3,7 +3,7 @@ data "aws_ecr_repository" "my_first_ecr_repo" {
 }
 
 data "aws_ecs_cluster" "my_cluster" {
-  name = "PayrollCluster" # Naming the cluster
+  cluster_name = "PayrollCluster" # Naming the cluster
 }
 
 data "aws_vpc" "selected" {
