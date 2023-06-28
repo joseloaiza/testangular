@@ -2,7 +2,7 @@ data "aws_ecr_repository" "my_first_ecr_repo" {
   name = "angulartest"
 }
 
-resource "aws_ecs_cluster" "my_cluster" {
+data "aws_ecs_cluster" "my_cluster" {
   name = "PayrollCluster" # Naming the cluster
 }
 
@@ -54,7 +54,7 @@ resource "aws_ecs_task_definition" "my_first_task" {
 
 resource "aws_ecs_service" "my_first_service" {
   name            = "AppTest-service"                             # Naming our first service
-  cluster         = "${aws_ecs_cluster.my_cluster.id}"             # Referencing our created Cluster
+  cluster         = "${data.aws_ecs_cluster.my_cluster.id}"             # Referencing our created Cluster
   task_definition = "${aws_ecs_task_definition.my_first_task.arn}" # Referencing the task our service will spin up
   launch_type     = "FARGATE"
   desired_count   = 2 # Setting the number of containers to 3
@@ -82,7 +82,7 @@ resource "aws_lb_listener_rule" "listener_rule" {
   }
 
   condition {
-    host_header {
+    path_pattern {
       values = ["/test/*"]
     }
   }
