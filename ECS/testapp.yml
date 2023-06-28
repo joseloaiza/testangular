@@ -5,7 +5,7 @@ Resources:
   AppTestTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      Name: payroll-tg-fe
+      Name: test-tg-fe
       VpcId: !ImportValue VPC
       Port: 80
       Protocol: HTTP
