@@ -29,7 +29,7 @@ Resources:
         - FARGATE
       ExecutionRoleArn: !ImportValue ECSTaskExecutionRole
       ContainerDefinitions:
-        - Name: PayrollApiV2
+        - Name: AngularTest
           Image: 746662389335.dkr.ecr.us-east-1.amazonaws.com/angulartest:latest
           PortMappings:
             - ContainerPort: 4567
@@ -61,7 +61,7 @@ Resources:
           SecurityGroups:
             - !ImportValue ContainerSecurityGroupPayroll
       LoadBalancers:
-        - ContainerName: angulartest
+        - ContainerName: AngularTest
           ContainerPort: 4567
           TargetGroupArn: !Ref AppTestTargetGroup
 
