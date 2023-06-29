@@ -23,6 +23,14 @@ resource "aws_lb_target_group" "target_group" {
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      =  data.aws_vpc.selected.id #"${aws_default_vpc.default_vpc.id}" # Referencing the default VPC
+  health_check {
+      healthy_threshold   = var.health_check["healthy_threshold"]
+      interval            = var.health_check["interval"]
+      unhealthy_threshold = var.health_check["unhealthy_threshold"]
+      timeout             = var.health_check["timeout"]
+      path                = var.health_check["path"]
+      port                = var.health_check["port"]
+  }
 }
 
 resource "aws_ecs_task_definition" "my_first_task" {
@@ -35,8 +43,8 @@ resource "aws_ecs_task_definition" "my_first_task" {
       "essential": true,
       "portMappings": [
         {
-          "containerPort": 3000,
-          "hostPort": 3000
+          "containerPort": 80,
+          "hostPort": 80
         }
       ],
       "memory": 512,
@@ -62,7 +70,7 @@ resource "aws_ecs_service" "my_first_service" {
   load_balancer {
     target_group_arn = "${aws_lb_target_group.target_group.arn}" # Referencing our target group
     container_name   = "${aws_ecs_task_definition.my_first_task.family}"
-    container_port   = 3000 # Specifying the container port
+    container_port   = 80 # Specifying the container port
   }
 
   network_configuration {
