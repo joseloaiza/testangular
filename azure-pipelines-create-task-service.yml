@@ -46,4 +46,5 @@ steps:
   inputs:
     provider: 'aws'
     command: 'destroy'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform5'
     environmentServiceNameAWS: 'aws-for-terraform'
